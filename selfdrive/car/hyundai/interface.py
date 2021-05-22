@@ -148,8 +148,8 @@ class CarInterface(CarInterfaceBase):
       ret.mass = 1275. + STD_CARGO_KG
       ret.wheelbase = 2.7
     elif candidate in [CAR.KONA_HEV, CAR.KONA_EV]:
-      ret.mass = 1685. + STD_CARGO_KG
-      ret.wheelbase = 2.7
+      ret.mass = 1425. + STD_CARGO_KG
+      ret.wheelbase = 2.6
     elif candidate in [CAR.IONIQ_HEV, CAR.IONIQ_EV]:
       ret.mass = 1490. + STD_CARGO_KG   #weight per hyundai site https://www.hyundaiusa.com/ioniq-electric/specifications.aspx
       ret.wheelbase = 2.7
