@@ -1229,7 +1229,7 @@ void VariableCruiseProfile::refresh() {
   btnplus.setText("▶");
 }
 
-CruisemodeSelInit::CruisemodeSelInit() : AbstractControl("設定定速巡航啟動方式", "設定定速巡航啟動方式。 禁用速度/速度+車距/僅速度/單向1車道/根據Tmap  禁用速度:無法透過方向盤按鈕控制速度, 車速+距離:可透過方向盤按鈕控制速度與車距, 僅速度:按鈕僅可控制車距, 單向1車道:降低鏡頭的偏移量，並靠最右側行駛, 根據Tmap:根據韓國Tmap導航", "../assets/offroad/icon_shell.png") {
+CruisemodeSelInit::CruisemodeSelInit() : AbstractControl("定速巡航啟動方式", "設定定速巡航啟動方式。 禁用速度/速度+車距/僅速度/單向1車道/根據Tmap  禁用速度:無法透過方向盤按鈕控制速度, 車速+距離:可透過方向盤按鈕控制速度與車距, 僅速度:按鈕僅可控制車距, 單向1車道:降低鏡頭的偏移量，並靠最右側行駛, 根據Tmap:根據韓國Tmap導航", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
