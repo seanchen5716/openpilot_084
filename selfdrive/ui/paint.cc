@@ -1094,7 +1094,7 @@ static void bb_ui_draw_UI(UIState *s) {
 }
 
 static void draw_navi_button(UIState *s) {
-  if (s->vipc_client->connected || s->is_OpenpilotViewEnabled) {
+  /*if (s->vipc_client->connected || s->is_OpenpilotViewEnabled) {
     int btn_w = 140;
     int btn_h = 140;
     int btn_x1 = s->viz_rect.x + s->viz_rect.w - btn_w - 195;
@@ -1109,7 +1109,7 @@ static void draw_navi_button(UIState *s) {
     nvgStroke(s->vg);
     nvgFontSize(s->vg, 45);
     nvgFillColor(s->vg, nvgRGBA(255,255,255,200));
-    nvgText(s->vg,btn_xc1,btn_yc,"NAVI",NULL);
+    nvgText(s->vg,btn_xc1,btn_yc,"NAVI",NULL);*/
   }
 }
 
@@ -1163,7 +1163,7 @@ static void ui_draw_vision_header(UIState *s) {
   if (!s->scene.comma_stock_ui) {
     bb_ui_draw_UI(s);
     ui_draw_tpms(s);
-    //draw_navi_button(s);
+    draw_navi_button(s);
   }
   if (s->scene.end_to_end && !s->scene.comma_stock_ui) {
     draw_laneless_button(s);
