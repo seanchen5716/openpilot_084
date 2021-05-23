@@ -1736,7 +1736,7 @@ void SpeedLimitOffset::refresh() {
   btnplus.setText("＋");
 }
 
-RESChoice::RESChoice() : AbstractControl("自動恢復速度RES設定", "設定自動恢復速度的時間點 1. 臨時剎車控制巡航速度, 2. 手動調整巡航速度", "../assets/offroad/icon_shell.png") {
+RESChoice::RESChoice() : AbstractControl("自動恢復速度RES", "設定自動恢復速度的時間點 1. 臨時剎車控制巡航速度, 2. 手動調整巡航速度", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -1792,9 +1792,9 @@ RESChoice::RESChoice() : AbstractControl("自動恢復速度RES設定", "設定�
 void RESChoice::refresh() {
   QString option = QString::fromStdString(Params().get("AutoResOption"));
   if (option == "0") {
-    label.setText(QString::fromStdString("臨時剎車控制巡航速度"));
+    label.setText(QString::fromStdString("剎車控制"));
   } else {
-    label.setText(QString::fromStdString("手動調整巡航速度"));
+    label.setText(QString::fromStdString("手動調整"));
   }
   btnminus.setText("◀");
   btnplus.setText("▶");
