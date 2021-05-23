@@ -47,7 +47,7 @@ class AutoResumeToggle : public ToggleControl {
   Q_OBJECT
 
 public:
-  AutoResumeToggle() : ToggleControl("Stop & Go", "開啟SCC的狀態，停止時會跟隨前車起步", "../assets/offroad/icon_shell.png", Params().getBool("OpkrAutoResume")) {
+  AutoResumeToggle() : ToggleControl("Stop＆Go", "開啟SCC的狀態，停止時會跟隨前車起步", "../assets/offroad/icon_shell.png", Params().getBool("OpkrAutoResume")) {
     QObject::connect(this, &AutoResumeToggle::toggleFlipped, [=](int state) {
       char value = state ? '1' : '0';
       Params().put("OpkrAutoResume", &value, 1);

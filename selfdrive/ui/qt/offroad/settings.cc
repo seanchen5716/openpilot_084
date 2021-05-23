@@ -200,8 +200,8 @@ DevicePanel::DevicePanel(QWidget* parent) : QWidget(parent) {
   }, "", this));
 
   QString brand = params.getBool("Passive") ? "行車記錄器模式" : "OPENPILOT";
-  offroad_btns.append(new ButtonControl(brand + " 제거", "제거", "", [=]() {
-    if (ConfirmationDialog::confirm("제거하시겠습니까?")) {
+  offroad_btns.append(new ButtonControl(brand + "刪除", "刪除", "", [=]() {
+    if (ConfirmationDialog::confirm("確定真的要刪除整個資料夾？")) {
       Params().putBool("DoUninstall", true);
     }
   }, "", this));
