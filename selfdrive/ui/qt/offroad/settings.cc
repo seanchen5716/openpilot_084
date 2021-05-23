@@ -25,7 +25,7 @@ TogglesPanel::TogglesPanel(QWidget *parent) : QWidget(parent) {
   QList<ParamControl*> toggles;
 
   toggles.append(new ParamControl("OpenpilotEnabledToggle",
-                                  "啟用오픈파일럿",
+                                  "啟用OPENPILOT",
                                   "어댑티브 크루즈 컨트롤 및 차선 유지 지원을 위해 오픈파일럿 시스템을 사용하십시오. 이 기능을 사용하려면 항상 주의를 기울여야 합니다. 이 설정을 변경하는 것은 자동차의 전원이 꺼졌을 때 적용됩니다.",
                                   "../assets/offroad/icon_openpilot.png",
                                   this));
