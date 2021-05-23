@@ -1109,8 +1109,8 @@ static void draw_navi_button(UIState *s) {
     nvgStroke(s->vg);
     nvgFontSize(s->vg, 45);
     nvgFillColor(s->vg, nvgRGBA(255,255,255,200));
-    nvgText(s->vg,btn_xc1,btn_yc,"NAVI",NULL);*/
-  }
+    nvgText(s->vg,btn_xc1,btn_yc,"NAVI",NULL);
+  }*/
 }
 
 static void draw_laneless_button(UIState *s) {
