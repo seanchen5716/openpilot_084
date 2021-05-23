@@ -74,10 +74,10 @@ TermsPage::TermsPage(QWidget *parent) : QFrame(parent){
   QHBoxLayout* buttons = new QHBoxLayout;
   main_layout->addLayout(buttons);
 
-  buttons->addWidget(new QPushButton("거절"));
+  buttons->addWidget(new QPushButton("拒絕"));
   buttons->addSpacing(50);
 
-  accept_btn = new QPushButton("스크롤하여 진행");
+  accept_btn = new QPushButton("滾動後繼續");
   accept_btn->setEnabled(false);
   buttons->addWidget(accept_btn);
   QObject::connect(accept_btn, &QPushButton::released, this, &TermsPage::acceptedTerms);
