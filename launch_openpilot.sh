@@ -9,7 +9,7 @@ if [ "$ALIAS_CHECK" == "" ]; then
     mount -o remount,r /system
 fi
 
-if [ ! -f "/data/KRSet" ]; then
+"""if [ ! -f "/data/KRSet" ]; then
     setprop persist.sys.locale ko-KR
     setprop persist.sys.local ko-KR
     setprop persist.sys.timezone Asia/Seoul
@@ -25,7 +25,7 @@ if [ ! -f "/system/fonts/opensans_regular.ttf" ]; then
   	chmod 644 /system/fonts/opensans*
     mount -o remount,r /system
     reboot
-fi
+fi"""
 
 export PASSIVE="0"
 exec ./launch_chffrplus.sh

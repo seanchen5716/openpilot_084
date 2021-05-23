@@ -168,7 +168,7 @@ OffroadHome::OffroadHome(QWidget* parent) : QFrame(parent) {
   QObject::connect(alert_notification, &QPushButton::released, this, &OffroadHome::openAlerts);
   header_layout->addWidget(alert_notification, 0, Qt::AlignHCenter | Qt::AlignRight);
 
-  std::string brand = Params().getBool("Passive") ? "대시캠" : "오픈파일럿";
+  std::string brand = Params().getBool("Passive") ? "行車記錄器模式" : "OPENPILOT模式";
   QLabel* version = new QLabel(QString::fromStdString(brand + " v" + Params().get("Version")));
   version->setStyleSheet(R"(font-size: 45px;)");
   header_layout->addWidget(version, 0, Qt::AlignHCenter | Qt::AlignRight);
@@ -233,7 +233,7 @@ void OffroadHome::refresh() {
     return;
   }
 
-  date->setText(QDateTime::currentDateTime().toString("yyyy년 M월 d일"));
+  date->setText(QDateTime::currentDateTime().toString("yyyy年 M月 d日"));
 
   // update alerts
 
@@ -245,10 +245,10 @@ void OffroadHome::refresh() {
   }
 
   if (alerts_widget->updateAvailable) {
-    alert_notification->setText("업데이트");
+    alert_notification->setText("更新");
   } else {
     int alerts = alerts_widget->alertCount;
-    alert_notification->setText(QString::number(alerts) + " 경고" + (alerts == 1 ? "" : "S"));
+    alert_notification->setText(QString::number(alerts) + " 警告" + (alerts == 1 ? "" : "S"));
   }
 
   if (!alert_notification->isVisible() && !first_refresh) {

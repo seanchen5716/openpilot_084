@@ -8,7 +8,7 @@
 #include <QMenu>
 #include "home.hpp"
 
-SshControl::SshControl() : AbstractControl("SSH 키 설정", "경고: 이렇게 하면 GitHub 설정의 모든 공개 키에 대한 SSH 액세스 권한이 부여됩니다. 사용자 이외의 GitHub 사용자 이름을 입력하지 마십시오. 콤마 직원은 절대 GitHub 사용자 이름을 추가하라는 요청을 하지 않습니다.", "") {
+SshControl::SshControl() : AbstractControl("SSH私鑰設定", "警告: 這將讓您可以使用github上設定的私鑰登入機器。除了本人之外，不得輸入其他人的github帳號。逗號員工也不會向您索取github帳號", "") {
 
   // setup widget
   hlayout->addStretch(1);
@@ -29,10 +29,10 @@ SshControl::SshControl() : AbstractControl("SSH 키 설정", "경고: 이렇게 
   hlayout->addWidget(&btn);
 
   QObject::connect(&btn, &QPushButton::released, [=]() {
-    if (btn.text() == "설정") {
-      username = InputDialog::getText("GitHub 아이디를 입력하세요");
+    if (btn.text() == "設定") {
+      username = InputDialog::getText("輸入您的GitHub ID");
       if (username.length() > 0) {
-        btn.setText("로딩중");
+        btn.setText("已設定");
         btn.setEnabled(false);
         getUserKeys(username);
       }
@@ -57,10 +57,10 @@ void SshControl::refresh() {
   QString param = QString::fromStdString(Params().get("GithubSshKeys"));
   if (param.length()) {
     username_label.setText(QString::fromStdString(Params().get("GithubUsername")));
-    btn.setText("제거");
+    btn.setText("解除");
   } else {
     username_label.setText("");
-    btn.setText("설정");
+    btn.setText("設定");
   }
   btn.setEnabled(true);
 }
@@ -95,12 +95,12 @@ void SshControl::parseResponse(){
       Params().put("GithubUsername", username.toStdString());
       Params().put("GithubSshKeys", response.toStdString());
     } else if(reply->error() == QNetworkReply::NoError){
-      err = username + " 사용자에 대한 Github 키가 존재하지 않습니다.";
+      err = username + "您輸入的Github帳號中不存在私鑰";
     } else {
-      err = username + " 사용자가 Github에 존재하지 않습니다.";
+      err = username + "Github帳號不存在";
     }
   } else {
-    err = "요청된 시간이 초과되었습니다.";
+    err = "已超過要求時間";
   }
 
   if (err.length()) {
@@ -112,7 +112,7 @@ void SshControl::parseResponse(){
   reply = nullptr;
 }
 
-GitHash::GitHash() : AbstractControl("커밋(로컬/리모트)", "", "") {
+GitHash::GitHash() : AbstractControl("版本(本地/遠端)", "", "") {
 
   QString lhash = QString::fromStdString(Params().get("GitCommit").substr(0, 10));
   QString rhash = QString::fromStdString(Params().get("GitCommitRemote").substr(0, 10));
@@ -132,7 +132,7 @@ GitHash::GitHash() : AbstractControl("커밋(로컬/리모트)", "", "") {
   hlayout->addWidget(&remote_hash);
 }
 
-OpenpilotView::OpenpilotView() : AbstractControl("오픈파일럿 주행화면 미리보기", "오픈파일럿 주행화면을 미리보기 합니다.", "") {
+OpenpilotView::OpenpilotView() : AbstractControl("預設OPENPILOT畫面", "預覽OPENPILOT巡航畫面", "") {
 
   // setup widget
   hlayout->addStretch(1);
@@ -163,13 +163,13 @@ OpenpilotView::OpenpilotView() : AbstractControl("오픈파일럿 주행화면 �
 void OpenpilotView::refresh() {
   bool param = Params().getBool("IsOpenpilotViewEnabled");
   if (param) {
-    btn.setText("미리보기해제");
+    btn.setText("取消預覽");
   } else {
-    btn.setText("미리보기");
+    btn.setText("預覽");
   }
 }
 
-CarRecognition::CarRecognition() : AbstractControl("차량강제인식", "핑거프린트 문제로 차량인식이 안될경우 차량을 선택하여 강제 인식합니다.", "") {
+CarRecognition::CarRecognition() : AbstractControl("強制識別車輛", "若指紋無法識別車輛，則選擇並強制識別車輛", "") {
 
   // setup widget
   hlayout->addStretch(1);
@@ -215,7 +215,7 @@ CarRecognition::CarRecognition() : AbstractControl("차량강제인식", "핑거
   vehicle_select_menu->addAction("SELTOS", [=]() {carname = "SELTOS";});
   vehicle_select_menu->addAction("SOUL_EV", [=]() {carname = "SOUL_EV";});
 
-  QPushButton *set_vehicle_btn = new QPushButton("선택");
+  QPushButton *set_vehicle_btn = new QPushButton("選擇");
   set_vehicle_btn->setMenu(vehicle_select_menu);
   hlayout->addWidget(set_vehicle_btn);
 
@@ -231,7 +231,7 @@ CarRecognition::CarRecognition() : AbstractControl("차량강제인식", "핑거
   hlayout->addWidget(&btn);
 
   QObject::connect(&btn, &QPushButton::released, [=]() {
-    if (btn.text() == "설정" && carname.length()) {
+    if (btn.text() == "設定" && carname.length()) {
       Params().put("CarModel", carname.toStdString());
       Params().put("CarModelAbb", carname.toStdString());
       QProcess::execute("/data/openpilot/car_force_set.sh");
@@ -251,17 +251,17 @@ void CarRecognition::refresh(QString carname) {
   QString param = QString::fromStdString(Params().get("CarModelAbb"));
   if (carname.length()) {
     carname_label.setText(carname);
-    btn.setText("제거");
+    btn.setText("清除");
   } else if (param.length()) {
     carname_label.setText(QString::fromStdString(Params().get("CarModelAbb")));
-    btn.setText("제거");
+    btn.setText("清除");
   } else {
     carname_label.setText("");
-    btn.setText("설정");
+    btn.setText("設定");
   }
 }
 
-CarForceSet::CarForceSet() : AbstractControl("차량강제인식", "핑거프린트 문제로 차량인식이 안될경우 차량명을 입력하시면 강제 인식 합니다.\n\n입력방법) 아래 참조하여 대문자로 차량명만 입력\nGENESIS, GENESIS_G70, GENESIS_G80, GENESIS_G90, AVANTE, I30, SONATA, SONATA_HEV, SONATA19, SONATA19_HEV, KONA, KONA_EV, KONA_HEV, IONIQ_EV, IONIQ_HEV, SANTA_FE, PALISADE, VELOSTER, GRANDEUR_IG, GRANDEUR_IG_HEV, GRANDEUR_IG_FL, GRANDEUR_IG_FL_HEV, NEXO, K3, K5, K5_HEV, SPORTAGE, SORENTO, STINGER, NIRO_EV, NIRO_HEV, CEED, K7, K7_HEV, SELTOS, SOUL_EV", "../assets/offroad/icon_shell.png") {
+CarForceSet::CarForceSet() : AbstractControl("強制車輛識別", "若指紋無法識別車輛，則輸入車輛名稱並強制識別車輛\n\n輸入方式)請參考下列車種名稱\nGENESIS, GENESIS_G70, GENESIS_G80, GENESIS_G90, AVANTE, I30, SONATA, SONATA_HEV, SONATA19, SONATA19_HEV, KONA, KONA_EV, KONA_HEV, IONIQ_EV, IONIQ_HEV, SANTA_FE, PALISADE, VELOSTER, GRANDEUR_IG, GRANDEUR_IG_HEV, GRANDEUR_IG_FL, GRANDEUR_IG_FL_HEV, NEXO, K3, K5, K5_HEV, SPORTAGE, SORENTO, STINGER, NIRO_EV, NIRO_HEV, CEED, K7, K7_HEV, SELTOS, SOUL_EV", "../assets/offroad/icon_shell.png") {
 
   // setup widget
   //hlayout->addStretch(1);
@@ -282,10 +282,10 @@ CarForceSet::CarForceSet() : AbstractControl("차량강제인식", "핑거프린
   hlayout->addWidget(&btnc);
 
   QObject::connect(&btnc, &QPushButton::released, [=]() {
-    if (btnc.text() == "설정") {
-      carname = InputDialog::getText("차량명은 이전메뉴 차량강제인식을 클릭하여 확인");
+    if (btnc.text() == "設定") {
+      carname = InputDialog::getText("請檢查車種名稱");
       if (carname.length() > 0) {
-        btnc.setText("완료");
+        btnc.setText("完成");
         btnc.setEnabled(false);
         Params().put("CarModel", carname.toStdString());
         QProcess::execute("/data/openpilot/car_force_set.sh");
@@ -303,17 +303,17 @@ void CarForceSet::refreshc() {
   QString paramc = QString::fromStdString(Params().get("CarModel"));
   if (paramc.length()) {
     //carname_label.setText(QString::fromStdString(Params().get("CarModel")));
-    btnc.setText("제거");
+    btnc.setText("清除");
   } else {
     //carname_label.setText("");
-    btnc.setText("설정");
+    btnc.setText("設定");
   }
   btnc.setEnabled(true);
 }
 
 
 //UI
-AutoShutdown::AutoShutdown() : AbstractControl("EON 자동 종료", "운행종료 후 설정시간 이후에 자동으로 이온이 꺼집니다.", "../assets/offroad/icon_shell.png") {
+AutoShutdown::AutoShutdown() : AbstractControl("C2自動關機", "操作完成後將自動關機", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -369,33 +369,33 @@ AutoShutdown::AutoShutdown() : AbstractControl("EON 자동 종료", "운행종�
 void AutoShutdown::refresh() {
   QString option = QString::fromStdString(Params().get("OpkrAutoShutdown"));
   if (option == "0") {
-    label.setText(QString::fromStdString("항상켜기"));
+    label.setText(QString::fromStdString("永不關機"));
   } else if (option == "1") {
-    label.setText(QString::fromStdString("바로끄기"));
+    label.setText(QString::fromStdString("立即關機"));
   } else if (option == "2") {
-    label.setText(QString::fromStdString("30초"));
+    label.setText(QString::fromStdString("30秒"));
   } else if (option == "3") {
-    label.setText(QString::fromStdString("1분"));
+    label.setText(QString::fromStdString("1分"));
   } else if (option == "4") {
-    label.setText(QString::fromStdString("3분"));
+    label.setText(QString::fromStdString("3分"));
   } else if (option == "5") {
-    label.setText(QString::fromStdString("5분"));
+    label.setText(QString::fromStdString("5分"));
   } else if (option == "6") {
-    label.setText(QString::fromStdString("10분"));
+    label.setText(QString::fromStdString("10分"));
   } else if (option == "7") {
-    label.setText(QString::fromStdString("30분"));
+    label.setText(QString::fromStdString("30分"));
   } else if (option == "8") {
-    label.setText(QString::fromStdString("1시간"));
+    label.setText(QString::fromStdString("1小時"));
   } else if (option == "9") {
-    label.setText(QString::fromStdString("3시간"));
+    label.setText(QString::fromStdString("3小時"));
   } else if (option == "10") {
-    label.setText(QString::fromStdString("5시간"));
+    label.setText(QString::fromStdString("5小時"));
   }
   btnminus.setText("－");
   btnplus.setText("＋");
 }
 
-VolumeControl::VolumeControl() : AbstractControl("EON 볼륨 조절(%)", "EON의 볼륨을 조절합니다. 안드로이드 기본값/수동설정", "../assets/offroad/icon_shell.png") {
+VolumeControl::VolumeControl() : AbstractControl("C2音量(%)", "調整C2音量，預設為Android音量或手動調整", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -457,7 +457,7 @@ VolumeControl::VolumeControl() : AbstractControl("EON 볼륨 조절(%)", "EON의
 void VolumeControl::refresh() {
   QString option = QString::fromStdString(Params().get("OpkrUIVolumeBoost"));
   if (option == "0") {
-    label.setText(QString::fromStdString("기본값"));
+    label.setText(QString::fromStdString("預設"));
   } else {
     label.setText(QString::fromStdString(Params().get("OpkrUIVolumeBoost")));
   }
@@ -465,7 +465,7 @@ void VolumeControl::refresh() {
   btnplus.setText("＋");
 }
 
-BrightnessControl::BrightnessControl() : AbstractControl("EON 밝기 조절(%)", "EON화면의 밝기를 조절합니다.", "../assets/offroad/icon_shell.png") {
+BrightnessControl::BrightnessControl() : AbstractControl("C2亮度(%)", "調整C2螢幕亮度", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -523,7 +523,7 @@ BrightnessControl::BrightnessControl() : AbstractControl("EON 밝기 조절(%)",
 void BrightnessControl::refresh() {
   QString option = QString::fromStdString(Params().get("OpkrUIBrightness"));
   if (option == "0") {
-    label.setText(QString::fromStdString("자동조절"));
+    label.setText(QString::fromStdString("自動調整"));
   } else {
     label.setText(QString::fromStdString(Params().get("OpkrUIBrightness")));
   }
@@ -531,7 +531,7 @@ void BrightnessControl::refresh() {
   btnplus.setText("＋");
 }
 
-AutoScreenOff::AutoScreenOff() : AbstractControl("EON 화면 끄기(분)", "주행 시작 후 화면보호를 위해 이온화면이 꺼지는 시간을 설정합니다. 터치나 이벤트 발생시 자동으로 켜집니다.", "../assets/offroad/icon_shell.png") 
+AutoScreenOff::AutoScreenOff() : AbstractControl("C2螢幕關閉(分)", "設定自動關閉螢幕的時間，如有觸摸螢幕或事件時開啟", "../assets/offroad/icon_shell.png") 
 {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
@@ -591,7 +591,7 @@ void AutoScreenOff::refresh()
 {
   QString option = QString::fromStdString(Params().get("OpkrAutoScreenOff"));
   if (option == "0") {
-    label.setText(QString::fromStdString("항상켜기"));
+    label.setText(QString::fromStdString("永不關閉"));
   } else {
     label.setText(QString::fromStdString(Params().get("OpkrAutoScreenOff")));
   }
@@ -599,7 +599,7 @@ void AutoScreenOff::refresh()
   btnplus.setText("＋");
 }
 
-ChargingMin::ChargingMin() : AbstractControl("배터리 최소 충전 값", "배터리 최소 충전값을 설정합니다.", "../assets/offroad/icon_shell.png") {
+ChargingMin::ChargingMin() : AbstractControl("電池電量最小值", "設定電池電量最小值", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -658,7 +658,7 @@ void ChargingMin::refresh() {
   btnplus.setText("＋");
 }
 
-ChargingMax::ChargingMax() : AbstractControl("배터리 최대 충전 값", "배터리 최대 충전값을 설정합니다.", "../assets/offroad/icon_shell.png") {
+ChargingMax::ChargingMax() : AbstractControl("電池電量最大值", "設定電池電量最大值", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -717,7 +717,7 @@ void ChargingMax::refresh() {
   btnplus.setText("＋");
 }
 
-FanSpeedGain::FanSpeedGain() : AbstractControl("팬속도 조절 Gain", "팬속도 Gain을 조절합니다. 팬 컨트롤 보드 사용시 팬 동작 기준값을 조절할 수 있습니다.", "../assets/offroad/icon_shell.png") {
+FanSpeedGain::FanSpeedGain() : AbstractControl("設定風扇速度Gain值", "調整風扇速度Gain值", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -776,7 +776,7 @@ void FanSpeedGain::refresh() {
   float valuef = valuei;
   QString valuefs = QString::number(valuef);
   if (valuefs == "0") {
-    label.setText(QString::fromStdString("기본값"));
+    label.setText(QString::fromStdString("預設"));
   } else {
     label.setText(QString::fromStdString(valuefs.toStdString()));
   }
@@ -784,7 +784,7 @@ void FanSpeedGain::refresh() {
   btnplus.setText("＋");
 }
 
-RecordCount::RecordCount() : AbstractControl("녹화파일 최대 개수 설정", "녹화 파일 최대 개수를 설정합니다.", "../assets/offroad/icon_shell.png") {
+RecordCount::RecordCount() : AbstractControl("最大錄影數", "設定最大錄影數", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -843,7 +843,7 @@ void RecordCount::refresh() {
   btnplus.setText("＋");
 }
 
-RecordQuality::RecordQuality() : AbstractControl("녹화 화질 설정", "녹화 화질을 설정합니다. 저화질/중화질/고화질/초고화질", "../assets/offroad/icon_shell.png") {
+RecordQuality::RecordQuality() : AbstractControl("錄影畫質設定", "設定錄影畫質 低/中/高/超高", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -899,19 +899,19 @@ RecordQuality::RecordQuality() : AbstractControl("녹화 화질 설정", "녹화
 void RecordQuality::refresh() {
   QString option = QString::fromStdString(Params().get("RecordingQuality"));
   if (option == "0") {
-    label.setText(QString::fromStdString("저화질"));
+    label.setText(QString::fromStdString("低"));
   } else if (option == "1") {
-    label.setText(QString::fromStdString("중화질"));
+    label.setText(QString::fromStdString("中"));
   } else if (option == "2") {
-    label.setText(QString::fromStdString("고화질"));
+    label.setText(QString::fromStdString("高"));
   } else {
-    label.setText(QString::fromStdString("초고화질"));
+    label.setText(QString::fromStdString("超高"));
   }
   btnminus.setText("◀");
   btnplus.setText("▶");
 }
 
-MonitoringMode::MonitoringMode() : AbstractControl("모니터링 모드 설정", "모니터링 모드를 설정합니다. 기본설정/졸음방지, 졸음방지의 경우 아래 Threshold 값을 조정(낮춤)하여 좀더 빨리 경고메시지를 보낼 수 있습니다.", "../assets/offroad/icon_shell.png") {
+MonitoringMode::MonitoringMode() : AbstractControl("設定監控模式", "設定監控模式，預設為防止打瞌睡，您可以調整（降低）臨界值來控制警告發出的速度", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -967,15 +967,15 @@ MonitoringMode::MonitoringMode() : AbstractControl("모니터링 모드 설정",
 void MonitoringMode::refresh() {
   QString option = QString::fromStdString(Params().get("OpkrMonitoringMode"));
   if (option == "0") {
-    label.setText(QString::fromStdString("기본설정"));
+    label.setText(QString::fromStdString("基本值"));
   } else if (option == "1") {
-    label.setText(QString::fromStdString("졸음방지"));
+    label.setText(QString::fromStdString("防止打瞌睡"));
   }
   btnminus.setText("◀");
   btnplus.setText("▶");
 }
 
-MonitorEyesThreshold::MonitorEyesThreshold() : AbstractControl("E2E EYE Threshold", "눈감지 범위에 대한 기준값을 조정합니다. 자신에게 맞는 값을 기준값을 설정합니다. 눈을 감고 있을 때 distratedEyes값 보다 낮게 설정해야 합니다. 기본값:0.75", "../assets/offroad/icon_shell.png") {
+MonitorEyesThreshold::MonitorEyesThreshold() : AbstractControl("E2E EYE Threshold", "調整眼睛偵測範圍，預設為0.75", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -1038,7 +1038,7 @@ void MonitorEyesThreshold::refresh() {
   btnplus.setText("＋");
 }
 
-NormalEyesThreshold::NormalEyesThreshold() : AbstractControl("Normal EYE Threshold", "눈 인식 기준값을 조정합니다. 인식률이 낮은경우 값을 낮춥니다. 기본값:0.5", "../assets/offroad/icon_shell.png") {
+NormalEyesThreshold::NormalEyesThreshold() : AbstractControl("Normal EYE Threshold", "調整眼睛是別的臨界值，預設為0.5，若辨識度降低請降低此值", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");
@@ -1101,7 +1101,7 @@ void NormalEyesThreshold::refresh() {
   btnplus.setText("＋");
 }
 
-BlinkThreshold::BlinkThreshold() : AbstractControl("Blink Threshold", "눈 깜빡임 정도에 대한 인식값을 조정합니다. 눈을 감고있을 때 BlinkProb를 확인후 값을 낮춰야 합니다. 기본값:0.5", "../assets/offroad/icon_shell.png") {
+BlinkThreshold::BlinkThreshold() : AbstractControl("Blink Threshold", "調整眨眼偵測的臨界值，預設為0.5，若閉上眼睛卻沒偵測到，請降低此值", "../assets/offroad/icon_shell.png") {
 
   label.setAlignment(Qt::AlignVCenter|Qt::AlignRight);
   label.setStyleSheet("color: #e0e879");

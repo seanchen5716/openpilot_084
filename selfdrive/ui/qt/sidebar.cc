@@ -189,13 +189,13 @@ Sidebar::Sidebar(QWidget* parent) : QFrame(parent) {
   ipaddr = new IPWidget("N/A", this);
   layout->addWidget(ipaddr, 0, Qt::AlignTop);
 
-  temp = new StatusWidget("0°C", "시스템온도", QColor(255, 255, 255), this);
+  temp = new StatusWidget("0°C", "系統溫度", QColor(255, 255, 255), this);
   layout->addWidget(temp, 0, Qt::AlignTop);
 
-  panda = new StatusWidget("차량\n연결안됨", "", QColor(201, 34, 49), this);
+  panda = new StatusWidget("未連結\n車輛", "", QColor(201, 34, 49), this);
   layout->addWidget(panda, 0, Qt::AlignTop);
 
-  connect = new StatusWidget("인터넷\n오프라인", "",  QColor(218, 202, 37), this);
+  connect = new StatusWidget("網路\n離線", "",  QColor(218, 202, 37), this);
   layout->addWidget(connect, 0, Qt::AlignTop);
 
   QImage image = QImageReader("../assets/images/button_home.png").read();
@@ -219,9 +219,9 @@ Sidebar::Sidebar(QWidget* parent) : QFrame(parent) {
 
 void Sidebar::update(const UIState &s){
   static std::map<NetStatus, std::pair<QString, QColor>> connectivity_map = {
-    {NET_ERROR, {"인터넷\n연결오류", COLOR_DANGER}},
-    {NET_CONNECTED, {"인터넷\n온라인", COLOR_GOOD}},
-    {NET_DISCONNECTED, {"인터넷\n오프라인", COLOR_WARNING}},
+    {NET_ERROR, {"網路\n連線錯誤", COLOR_DANGER}},
+    {NET_CONNECTED, {"網路\n已連線", COLOR_GOOD}},
+    {NET_DISCONNECTED, {"網路\n未連線", COLOR_WARNING}},
   };
   auto net_params = connectivity_map[s.scene.athenaStatus];
   connect->update(net_params.first, "", net_params.second);
@@ -232,7 +232,7 @@ void Sidebar::update(const UIState &s){
         {cereal::DeviceState::ThermalStatus::RED, COLOR_DANGER},
         {cereal::DeviceState::ThermalStatus::DANGER, COLOR_DANGER}};
   QString temp_val = QString("%1 °C").arg((int)s.scene.deviceState.getAmbientTempC());
-  temp->update(temp_val, "시스템온도", temp_severity_map[s.scene.deviceState.getThermalStatus()]);
+  temp->update(temp_val, "系統溫度", temp_severity_map[s.scene.deviceState.getThermalStatus()]);
 
   static std::map<cereal::DeviceState::NetworkType, const char *> network_type_map = {
       {cereal::DeviceState::NetworkType::NONE, "--"},
@@ -263,12 +263,12 @@ void Sidebar::update(const UIState &s){
   ipaddr->update(s.scene.ipAddr);
 
   QColor panda_color = COLOR_GOOD;
-  QString panda_message = "차량\n연결됨";
+  QString panda_message = "已連接\n車輛";
   if (s.scene.pandaType == cereal::PandaState::PandaType::UNKNOWN) {
     panda_color = COLOR_DANGER;
-    panda_message = "차량\n연결안됨";
+    panda_message = "未連接\n車輛";
   } else if (s.scene.satelliteCount > 0) {
-    panda_message = QString("차량연결됨\nSAT : %1").arg(s.scene.satelliteCount);
+    panda_message = QString("車輛已連接\nSAT : %1").arg(s.scene.satelliteCount);
   }
 #ifdef QCOM2
   else if (s.scene.started) {
